@@ -15,8 +15,7 @@ public class main {
 
         Customers customers = new Customers();
         SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
-        
-        
+
         int testCase = 10;
         do {
             System.out.println("----------MAIN MENU------------");
@@ -78,16 +77,16 @@ public class main {
                     break;
                 case 4:
                     try {
-                        setmenus.readFromFile();
-                    } catch (Exception e) {
-                    }
-                    setmenus.showAll();
-                    break;
+                    setmenus.readFromFile();
+                } catch (Exception e) {
+                }
+                setmenus.showAll();
+                break;
 
                 case 5:
                     option = 0;
                     do {
-                        
+
                         System.out.println("1. Place another order");
                         System.out.println("2. Return to main menu");
                         System.out.print("Enter your option: ");
