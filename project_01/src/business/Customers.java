@@ -9,6 +9,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     private boolean isSaved;
 
     public Customers() {
+        super();
     }
 
     public boolean isDupplicate(Customer t) {
