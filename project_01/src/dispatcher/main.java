@@ -66,7 +66,7 @@ public class main {
                         if (cs.isEmpty()) {
                             System.out.println("No one matches the search critearia.");
                         } else {
-                            customers.showAll();
+                            customers.showAll(cs);
                         }
 
                         System.out.println("1. Continue search");

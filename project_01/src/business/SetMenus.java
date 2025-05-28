@@ -69,6 +69,9 @@ public class SetMenus extends TreeMap<String, SetMenu> {
                 String name = strs[1];
                 double price = Double.parseDouble(strs[2]);
                 String ingredients = strs[3];
+                if (ingredients.startsWith("\"") && ingredients.endsWith("\"")) {
+                    ingredients = ingredients.substring(1, ingredients.length() - 1);
+                }
                 sm = new SetMenu(menuId, name, price, ingredients);
             } catch (Exception e) {
             }

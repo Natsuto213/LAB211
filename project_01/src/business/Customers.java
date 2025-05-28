@@ -40,7 +40,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
         System.out.format("%-6s | %-25s | %-11s | %-20s%n", "Code", "Customer Name", "Phone", "Email");
         System.out.println("-------------------------------------------------------------");
         for (Customer c : h) {
-            System.out.format("%-6s | %-25s | %-11s | %-20s%n", c.getCustomerId(), c.getName(), c.getPhone(), c.getEmail());
+            System.out.println(c);
         }
         System.out.println("-------------------------------------------------------------");
     }
@@ -56,7 +56,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     }
 
     public HashSet<Customer> filterByName(String name) {
-        HashSet<Customer> result = null;
+        HashSet<Customer> result = new HashSet<>();
         for (Customer c : this) {
             String cName = c.getName().toUpperCase();
             String kName = name.toUpperCase();
