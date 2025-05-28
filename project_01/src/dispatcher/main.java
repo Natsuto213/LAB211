@@ -97,7 +97,7 @@ public class main {
                     customers.showAll();
                     break;
                 default:
-                    System.out.println("Exit");
+                    System.out.println("Exit...., bye bye");
                     break;
             }
         } while (testCase >= 1 && testCase <= 8);
