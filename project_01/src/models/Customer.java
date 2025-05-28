@@ -53,7 +53,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return String.format("%-6s | %-25s | %-11s | %-20s%n", customerId, getName(), phone, email);
+        return String.format("%-6s | %-25s | %-11s | %-20s%n", customerId, name, phone, email);
     }
 
     @Override
