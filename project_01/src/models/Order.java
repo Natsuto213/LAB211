@@ -73,8 +73,7 @@ public class Order {
 
     @Override
     public String toString() {
-//        return String.format("%-5s | %-10s | %-11s | %-8s | %-9s| %-6s | %-10s\n",
-//                orderCode, eventDate, customerId, menuId,province, numOfTables, ;
+       
         return String.format("hehe");
     }
 

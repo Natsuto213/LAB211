@@ -3,7 +3,6 @@ package dispatcher;
 import business.Customers;
 import business.Orders;
 import business.SetMenus;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Scanner;
 import models.Customer;
@@ -28,6 +27,7 @@ public class main {
             System.out.println("3. Seach for customer information by name");
             System.out.println("4. Display feast menu");
             System.out.println("5. Place a feast order");
+            System.out.println("7. Save data to file");
             System.out.println("8. Display all customers");
             System.out.println("Other-Quit.");
             System.out.print("Enter Test Case No. : ");
@@ -89,16 +89,30 @@ public class main {
                     break;
                 }
                 case 5:
-                    Order order = ip.inputOrder(customers, setmenus);
-                    if (orders.contains(order)) {
-                        System.out.println("Dupplicate data !");
-                    } else {
-                        orders.addNew(order);
-                        order.display(customers, setmenus);
-                    }
+                    option = 0;
+                    do {
+                        Order order = ip.inputOrder(customers, setmenus);
+                        if (orders.contains(order)) {
+                            System.out.println("Dupplicate data !");
+                        } else {
+                            orders.addNew(order);
+                            order.display(customers, setmenus);
+                        }
+                        System.out.println("1. Continue your order");
+                        System.out.println("2. Return to main menu");
+                        System.out.print("Enter your option: ");
+                        option = Integer.parseInt(sc.nextLine());
+                    } while (option != 2);
+
+                    break;
+                case 7:
+                    customers.saveToFile();
+                    System.out.println("Customer data has been succesfully saved to 'customer.dat'");
+                    orders.saveToFile();
+                    System.out.println("Order data has been succesfully saved to 'feast_order_service.dat'");
                     break;
                 case 8:
-                    customers.showAll();
+
                     break;
                 default:
                     System.out.println("Exit...., bye bye");
