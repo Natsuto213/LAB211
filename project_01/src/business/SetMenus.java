@@ -23,6 +23,7 @@ public class SetMenus extends TreeMap<String, SetMenu> {
 
     public SetMenus(String pathFile) {
         this.pathFile = pathFile;
+        readFromFile();
     }
 
     public void readFromFile() {
@@ -88,6 +89,14 @@ public class SetMenus extends TreeMap<String, SetMenu> {
         for (SetMenu sm : values) {
             System.out.println(sm);
         }
+    }
+
+    public SetMenu searchById(String id) {
+        return this.get(id);
+    }
+
+    public boolean contains(String id) {
+        return this.containsKey(id);
     }
 
 }

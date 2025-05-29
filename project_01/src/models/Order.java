@@ -1,34 +1,36 @@
 package models;
 
+import business.Customers;
+import business.SetMenus;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Order {
 
-    private String orderCode;
+    private String orderId;
     private String customerId;
-    private String province;
-    private String menuId;
+    private String codeOfSetMenu;
     private int numOfTables;
     private Date eventDate;
 
     public Order() {
     }
 
-    public Order(String orderCode, String customerId, String province, String menuId, int numOfTables, Date eventDate) {
-        this.orderCode = orderCode;
+    public Order(String customerId, String codeOfSetMenu, int numOfTables, Date eventDate) {
+        this.orderId = generateOrderCode();
         this.customerId = customerId;
-        this.province = province;
-        this.menuId = menuId;
+        this.codeOfSetMenu = codeOfSetMenu;
         this.numOfTables = numOfTables;
         this.eventDate = eventDate;
     }
 
     public String getOrderCode() {
-        return orderCode;
+        return orderId;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setOrderCode(String orderId) {
+        this.orderId = orderId;
     }
 
     public String getCustomerId() {
@@ -39,20 +41,12 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
     public String getMenuId() {
-        return menuId;
+        return codeOfSetMenu;
     }
 
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
+    public void setMenuId(String codeOfSetMenu) {
+        this.codeOfSetMenu = codeOfSetMenu;
     }
 
     public int getNumOfTables() {
@@ -71,9 +65,59 @@ public class Order {
         this.eventDate = eventDate;
     }
 
+    public String generateOrderCode() {
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        return sdf.format(now);
+    }
+
     @Override
     public String toString() {
+//        return String.format("%-5s | %-10s | %-11s | %-8s | %-9s| %-6s | %-10s\n",
+//                orderCode, eventDate, customerId, menuId,province, numOfTables, ;
         return String.format("hehe");
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (!Objects.equals(this.customerId, other.customerId)) {
+            return false;
+        }
+        if (!Objects.equals(this.codeOfSetMenu, other.codeOfSetMenu)) {
+            return false;
+        }
+        return Objects.equals(this.eventDate, other.eventDate);
+    }
+
+    public void display(Customers customers, SetMenus setMenus) {
+        System.out.println("--------------------");
+        System.out.println("Customer order information [Order id: " + this.getOrderCode() + "]");
+        System.out.println("--------------------");
+        Customer c = customers.searchById(this.getCustomerId());
+        c.display();
+        System.out.println("--------------------");
+
+        SetMenu s = setMenus.searchById(this.getMenuId());
+        s.display(this.eventDate, this.numOfTables);
+        System.out.println("--------------------");
+
+        System.out.format("%-16s: %,d Vnd\n", "Total cost", (int) s.getPrice() * this.getNumOfTables());
     }
 
 }

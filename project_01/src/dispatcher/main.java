@@ -1,10 +1,13 @@
 package dispatcher;
 
 import business.Customers;
+import business.Orders;
 import business.SetMenus;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Scanner;
 import models.Customer;
+import models.Order;
 import tools.Inputter;
 
 public class main {
@@ -15,6 +18,7 @@ public class main {
 
         Customers customers = new Customers();
         SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
+        Orders orders = new Orders();
 
         int testCase = 10;
         do {
@@ -23,6 +27,7 @@ public class main {
             System.out.println("2. Update customer information");
             System.out.println("3. Seach for customer information by name");
             System.out.println("4. Display feast menu");
+            System.out.println("5. Place a feast order");
             System.out.println("8. Display all customers");
             System.out.println("Other-Quit.");
             System.out.print("Enter Test Case No. : ");
@@ -75,23 +80,22 @@ public class main {
                         option = Integer.parseInt(sc.nextLine());
                     } while (option != 2);
                     break;
-                case 4:
+                case 4: {
                     try {
-                    setmenus.readFromFile();
-                } catch (Exception e) {
+                        setmenus.readFromFile();
+                    } catch (Exception e) {
+                    }
+                    setmenus.showAll();
+                    break;
                 }
-                setmenus.showAll();
-                break;
-
                 case 5:
-                    option = 0;
-                    do {
-
-                        System.out.println("1. Place another order");
-                        System.out.println("2. Return to main menu");
-                        System.out.print("Enter your option: ");
-                        option = Integer.parseInt(sc.nextLine());
-                    } while (option != 2);
+                    Order order = ip.inputOrder(customers, setmenus);
+                    if (orders.contains(order)) {
+                        System.out.println("Dupplicate data !");
+                    } else {
+                        orders.addNew(order);
+                        order.display(customers, setmenus);
+                    }
                     break;
                 case 8:
                     customers.showAll();

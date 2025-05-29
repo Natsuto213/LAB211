@@ -9,7 +9,8 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     private boolean isSaved;
 
     public Customers() {
-        super();
+        // Tao 1 vai customer mau:
+        this.add(new Customer("C0001", "Vo Anh Phat", "0901345599", "phatvo@gmail.com"));
     }
 
     public boolean isDupplicate(Customer t) {

@@ -1,9 +1,9 @@
 package business;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import models.Order;
 
-public class Orders extends HashSet<Order> implements Workable<Order, String> {
+public class Orders extends ArrayList<Order> implements Workable<Order, String> {
 
     String pathFile;
     boolean isSaved;
@@ -20,8 +20,6 @@ public class Orders extends HashSet<Order> implements Workable<Order, String> {
     public void addNew(Order t) {
         if (!this.isDupplicate(t)) {
             this.add(t);
-        } else {
-            System.out.println("Dupplicate data!");
         }
     }
 

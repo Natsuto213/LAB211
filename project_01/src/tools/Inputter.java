@@ -1,6 +1,13 @@
 package tools;
 
+import business.Customers;
+import business.SetMenus;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Customer;
 import models.Order;
 
@@ -13,7 +20,7 @@ public class Inputter {
     }
 
     public String getString(String msg) {
-        System.out.println(msg);
+        System.out.print(msg);
         return sc.nextLine();
     }
 
@@ -54,7 +61,7 @@ public class Inputter {
     public Customer inputCustomer(boolean isUpdated) {
         Customer customer = new Customer();
 
-        String msg = "Input Customer Code (the first character is [C,G,K], followed by 4 digits): ";
+        String msg = "Enter Customer Code (the first character is [C,G,K], followed by 4 digits): ";
         String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
         String pattern = Acceptable.CUST_ID_VALID;
         if (!isUpdated) {
@@ -62,17 +69,17 @@ public class Inputter {
 
         }
 
-        msg = "Input name: ";
+        msg = "Enter name: ";
         errorMsg = "Name cannot be empty. Name must be between 2 and 25 characters.";
         pattern = Acceptable.CUST_NAME_VALID;
         customer.setName(input(msg, errorMsg, pattern));
 
-        msg = "Input phone: ";
+        msg = "Enter phone: ";
         errorMsg = "Invalid phone format!";
         pattern = Acceptable.PHONE_VALID;
         customer.setPhone(input(msg, errorMsg, pattern));
 
-        msg = "Input email: ";
+        msg = "Enter email: ";
         errorMsg = "Invalid email format!";
         pattern = Acceptable.EMAIL_VALID;
         customer.setEmail(input(msg, errorMsg, pattern));
@@ -80,18 +87,65 @@ public class Inputter {
         return customer;
     }
 
-    public Order inputOrder() {
-        Order order = new Order();
+    public Order inputOrder(Customers customers, SetMenus setmenus) {
 
-        String msg = "Input Customer code.";
-        String errorMsg = "Customer has not registered";
-        String pattern = Acceptable.CUST_ID_VALID;
+        //CustomerId
+        String customerCode = "";
+        boolean checkCustomerCode = false;
+        do {
+            String msg = "Enter Customer Code: ";
+            String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
+            String pattern = Acceptable.CUST_ID_VALID;
+            customerCode = input(msg, errorMsg, pattern).toUpperCase();
 
-        msg = "Input number of tables.";
-        errorMsg = "Must be greater than zero";
-        pattern = Acceptable.POST_INT;
-        order.setNumOfTables(getInt(msg));
+            if (customers.searchById(customerCode) != null) {
+                checkCustomerCode = true;
+            } else {
+                System.out.println("Customer is not exists!");
+            }
+        } while (!checkCustomerCode);
 
+        // SetMenuID
+        String setMenuCode = "";
+        boolean checkSetMenu = false;
+        do {
+            System.out.print("Enter SetMenu code: ");
+            setMenuCode = sc.nextLine();
+            if (setmenus.contains(setMenuCode)) {
+                checkSetMenu = true;
+            } else {
+                System.out.println("SetMen Code is not exists!");
+            }
+        } while (!checkSetMenu);
+
+        // Number of table
+        int numberOfTable = 0;
+        String msg = "Enter number of tables: ";
+        String errorMsg = "Number of tables must be greater than zero!";
+        String pattern = Acceptable.POST_INT;
+        numberOfTable = Integer.parseInt(input(msg, errorMsg, pattern));
+
+        // Event date
+        Date eventDate = null;
+        boolean checkEventDate = false;
+        do {
+            try {
+                System.out.print("Enter preferred date: ");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String inputDate = sc.nextLine().trim();
+                eventDate = sdf.parse(inputDate);
+                Date today = new Date();
+                if (eventDate.after(today)) {
+                    checkEventDate = true;
+                } else {
+                    System.out.println("The preferred event date must be in the future!");
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(Inputter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } while (!checkEventDate);
+
+        Order order = new Order(customerCode, setMenuCode, numberOfTable, eventDate);
         return order;
     }
 }

@@ -78,4 +78,11 @@ public class Customer {
         return Objects.equals(this.customerId, other.customerId);
     }
 
+    public void display() {
+        System.out.format("%-14s: %s\n", "Customer code", this.getCustomerId());
+        System.out.format("%-14s: %s\n", "Customer name", this.getName());
+        System.out.format("%-14s: %s\n", "Phone number", this.getPhone());
+        System.out.format("%-14s: %s\n", "Email", this.getEmail());
+
+    }
 }

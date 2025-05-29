@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 public class SetMenu implements Comparable<SetMenu> {
 
     private String menuId;
@@ -51,13 +53,21 @@ public class SetMenu implements Comparable<SetMenu> {
 
     @Override
     public String toString() {
-        return String.format(
-                "Code       :%s\n"
-                + "Name       :%s\n"
-                + "Price      :%,d Vnd\n"
+        return String.format("%-11s:%s\n"
+                + "%-11s:%s\n"
+                + "%-11s:%,d Vnd\n"
                 + "Ingredients:\n%s"
-                + "\n--------------------------------------",
-                menuId, name, (int) price, ingredients = ingredients.replace("#", "\n"));
+                + "\n------------------------------",
+                "Code", this.getMenuId(), "Name", this.getName(), "Price", (int) this.getPrice(), ingredients = ingredients.replace("#", "\n"));
+    }
+
+    public void display(Date date, int quantity) {
+        System.out.format("%-16s: %s\n", "Code of Set Menu", this.getMenuId());
+        System.out.format("%-16s: %s\n", "Set menu name", this.getName());
+        System.out.format("%-16s: %s\n", "Event date", date);
+        System.out.format("%-16s: %s\n", "Number of tables", quantity);
+        System.out.format("%-16s: %,d Vnd\n", "Price", (int) this.getPrice());
+        System.out.format("Ingredients:\n%s\n", ingredients = ingredients.replace("#", "\n"));
     }
 
     @Override
