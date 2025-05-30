@@ -1,5 +1,6 @@
 package business;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
         super();
         this.pathFile = "./src/data/customers.dat";
         this.isSaved = true;
-        readFromFile();
+//        readFromFile();
 
         // tao 1 vai customer mau
         this.add(new Customer("C0001", "Vo Anh Phat", "0901345599", "phatvo@gmail.com"));
@@ -127,30 +128,28 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     }
 
     public void readFromFile() {
-
-        // 1. File
         File f = new File(pathFile);
         if (!f.exists()) {
-            System.out.println("The customer.dat is not exist!");
+            System.out.println("Cannot read data from customer.dat. Please check it.");
+
         } else {
             FileInputStream fis = null;
             try {
-                // 2. FileInputStream
                 fis = new FileInputStream(f);
-                // 3. ObjectInputStream
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                // 4. Lap de doc du lieu
-                while (fis.available() > 0) {
-                    Customer c = (Customer) ois.readObject();
-                    this.add(c);
+                while (true) {
+                    try {
+                        Customer c = (Customer) ois.readObject();
+                        this.add(c);
+                    } catch (EOFException e) {
+                        break;
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                // 5. close
-                ois.close();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
@@ -159,7 +158,6 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
                     Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
         }
     }
 }

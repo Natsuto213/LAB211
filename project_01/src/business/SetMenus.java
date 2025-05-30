@@ -19,8 +19,8 @@ public class SetMenus extends TreeMap<String, SetMenu> {
 
     private String pathFile;
 
-    public SetMenus(String pathFile) {
-        this.pathFile = pathFile;
+    public SetMenus() {
+        this.pathFile = "./src/data/FeastMenu.csv";
         readFromFile();
     }
 

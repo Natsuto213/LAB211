@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Customer;
 import models.Order;
+import models.SetMenu;
 
 public class Orders extends ArrayList<Order> implements Workable<Order, String> {
 
@@ -36,19 +37,19 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
 
     @Override
     public void update(Order t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void showAll() {
-        System.out.println("----------------------------------------------------");
-        System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10s\n",
-                "ID", "Event Date", "Customer ID", "Set Menu", "Price", "Tables", "Cost");
+        this.remove(t);
+        this.add(t);
     }
 
     @Override
     public Order searchById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Order o : this) {
+            if (o.getOrderCode() == id) {
+                return o;
+            }
+        }
+        return null;
+
     }
 
     public void saveToFile() {
@@ -80,7 +81,6 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     }
 
     public void readFromFile() {
-
         // 1. File
         File f = new File(pathFile);
         if (!f.exists()) {
@@ -113,6 +113,25 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
                 }
             }
 
+        }
+    }
+
+    @Override
+    public void showAll() {
+        SetMenus setmenus = null;
+        showAll(this, setmenus);
+    }
+
+    public void showAll(ArrayList<Order> o, SetMenus setmenus) {
+        System.out.println("----------------------------------------------------");
+        System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10s\n",
+                "ID", "Event Date", "Customer ID", "Set Menu", "Price", "Tables", "Cost");
+        System.out.println("----------------------------------------------------");
+        for (Iterator<Order> it = this.iterator(); it.hasNext();) {
+            Order ord = it.next();
+            SetMenu s = setmenus.searchById(ord.getMenuId());
+            System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10,d\n",
+                    ord.getCustomerId(), ord.getEventDate(), ord.getCustomerId(), ord.getMenuId(), (int) s.getPrice(), ord.getNumOfTables(), (int) ord.getNumOfTables() * s.getPrice());
         }
     }
 

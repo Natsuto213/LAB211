@@ -16,7 +16,7 @@ public class main {
         Scanner sc = new Scanner(System.in);
 
         Customers customers = new Customers();
-        SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
+        SetMenus setmenus = new SetMenus();
         Orders orders = new Orders();
 
         int testCase = 10;
@@ -27,8 +27,9 @@ public class main {
             System.out.println("3. Seach for customer information by name");
             System.out.println("4. Display feast menu");
             System.out.println("5. Place a feast order");
+            System.out.println("6. Update order information");
             System.out.println("7. Save data to file");
-            System.out.println("8. Display all customers");
+            System.out.println("8. Display Customer or Order lists");
             System.out.println("Other-Quit.");
             System.out.print("Enter Test Case No. : ");
             testCase = Integer.parseInt(sc.nextLine());
@@ -91,7 +92,7 @@ public class main {
                 case 5:
                     option = 0;
                     do {
-                        Order order = ip.inputOrder(customers, setmenus);
+                        Order order = ip.inputOrder(customers, setmenus, false);
                         if (orders.contains(order)) {
                             System.out.println("Dupplicate data !");
                         } else {
@@ -105,13 +106,45 @@ public class main {
                     } while (option != 2);
 
                     break;
+                case 6:
+                    System.out.print("Enter order ID: ");
+                    String orderID = sc.nextLine();
+                    Order o = orders.searchById(orderID);
+                    if(o == null){
+                        System.out.println("This Order does not exist.");
+                    }else{
+                        Order order = ip.inputOrder(customers, setmenus, true);
+                    }
+                    
+                    break;
                 case 7:
                     customers.saveToFile();
                     System.out.println("Customer data has been succesfully saved to 'customer.dat'");
                     orders.saveToFile();
                     System.out.println("Order data has been succesfully saved to 'feast_order_service.dat'");
                     break;
+
                 case 8:
+                    option = 0;
+                    System.out.println("Display customer or order lists");
+                    System.out.println("1. Customer list.");
+                    System.out.println("2. Order list");
+                    System.out.print("Enter your option: ");
+                    option = Integer.parseInt(sc.nextLine());
+                    switch (option) {
+
+                        case 1:
+                            customers.readFromFile();
+                            customers.showAll();
+                            break;
+                        case 2:
+                            orders.readFromFile();
+                            orders.showAll();
+                            break;
+                        default:
+                            System.out.println("Return to main menu...");
+                            break;
+                    }
 
                     break;
                 default:

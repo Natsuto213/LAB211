@@ -87,7 +87,7 @@ public class Inputter {
         return customer;
     }
 
-    public Order inputOrder(Customers customers, SetMenus setmenus) {
+    public Order inputOrder(Customers customers, SetMenus setmenus, boolean updated) {
 
         //CustomerId
         String customerCode = "";
@@ -96,7 +96,9 @@ public class Inputter {
             String msg = "Enter Customer Code: ";
             String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
             String pattern = Acceptable.CUST_ID_VALID;
-            customerCode = input(msg, errorMsg, pattern).toUpperCase();
+            if (!updated) {
+                customerCode = input(msg, errorMsg, pattern).toUpperCase();
+            }
 
             if (customers.searchById(customerCode) != null) {
                 checkCustomerCode = true;

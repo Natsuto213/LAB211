@@ -2,11 +2,12 @@ package models;
 
 import business.Customers;
 import business.SetMenus;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Comparable<Order> {
 
     private String orderId;
     private String customerId;
@@ -73,8 +74,7 @@ public class Order {
 
     @Override
     public String toString() {
-       
-        return String.format("hehe");
+        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", codeOfSetMenu=" + codeOfSetMenu + ", numOfTables=" + numOfTables + ", eventDate=" + eventDate + '}';
     }
 
     @Override
@@ -105,18 +105,23 @@ public class Order {
     }
 
     public void display(Customers customers, SetMenus setMenus) {
-        System.out.println("--------------------");
+        System.out.println("---------------------------------");
         System.out.println("Customer order information [Order id: " + this.getOrderCode() + "]");
-        System.out.println("--------------------");
+        System.out.println("---------------------------------");
+
         Customer c = customers.searchById(this.getCustomerId());
         c.display();
-        System.out.println("--------------------");
+        System.out.println("---------------------------------");
 
         SetMenu s = setMenus.searchById(this.getMenuId());
         s.display(this.eventDate, this.numOfTables);
-        System.out.println("--------------------");
+        System.out.println("---------------------------------");
 
         System.out.format("%-16s: %,d Vnd\n", "Total cost", (int) s.getPrice() * this.getNumOfTables());
     }
 
+    @Override
+    public int compareTo(Order that) {
+        return this.eventDate.compareTo(that.eventDate);
+    }
 }
