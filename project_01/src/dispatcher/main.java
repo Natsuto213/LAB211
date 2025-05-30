@@ -107,15 +107,26 @@ public class main {
 
                     break;
                 case 6:
-                    System.out.print("Enter order ID: ");
-                    String orderID = sc.nextLine();
-                    Order o = orders.searchById(orderID);
-                    if(o == null){
-                        System.out.println("This Order does not exist.");
-                    }else{
-                        Order order = ip.inputOrder(customers, setmenus, true);
-                    }
-                    
+                    option = 0;
+                    do {
+                        System.out.print("Enter order ID: ");
+                        String orderID = sc.nextLine();
+                        Order o = orders.searchById(orderID);
+                        if (o == null) {
+                            System.out.println("This Order does not exist.");
+                        } else {
+                            Order order = ip.inputOrder(customers, setmenus, true);
+                            order.setOrderCode(orderID);
+                            orders.update(order);
+                            System.out.println("Update successful.");
+                        }
+
+                        System.out.println("1. Continue update your order.");
+                        System.out.println("2. Return to main menu");
+                        System.out.print("Enter your option: ");
+                        option = Integer.parseInt(sc.nextLine());
+                    } while (option != 2);
+
                     break;
                 case 7:
                     customers.saveToFile();
@@ -148,7 +159,7 @@ public class main {
 
                     break;
                 default:
-                    System.out.println("Exit...., bye bye");
+                    System.out.println("Exit");
                     break;
             }
         } while (testCase >= 1 && testCase <= 8);

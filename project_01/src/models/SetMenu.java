@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SetMenu implements Comparable<SetMenu> {
@@ -62,9 +63,10 @@ public class SetMenu implements Comparable<SetMenu> {
     }
 
     public void display(Date date, int quantity) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         System.out.format("%-16s: %s\n", "Code of Set Menu", this.getMenuId());
         System.out.format("%-16s: %s\n", "Set menu name", this.getName());
-        System.out.format("%-16s: %s\n", "Event date", date);
+        System.out.format("%-16s: %s\n", "Event date", sdf.format(date));
         System.out.format("%-16s: %s\n", "Number of tables", quantity);
         System.out.format("%-16s: %,d Vnd\n", "Price", (int) this.getPrice());
         System.out.format("Ingredients:\n%s\n", ingredients = ingredients.replace("#", "\n"));
