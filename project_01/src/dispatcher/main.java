@@ -15,9 +15,9 @@ public class main {
         Inputter ip = new Inputter();
         Scanner sc = new Scanner(System.in);
 
-        Customers customers = new Customers();
-        SetMenus setmenus = new SetMenus();
-        Orders orders = new Orders();
+        Customers customers = new Customers("./src/data/customers.dat");
+        SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
+        Orders orders = new Orders("./src/data/feast_order_service.dat");
 
         int testCase = 10;
         do {
@@ -104,7 +104,6 @@ public class main {
                         System.out.print("Enter your option: ");
                         option = Integer.parseInt(sc.nextLine());
                     } while (option != 2);
-
                     break;
                 case 6:
                     option = 0;
@@ -130,34 +129,19 @@ public class main {
                     break;
                 case 7:
                     customers.saveToFile();
-                    System.out.println("Customer data has been succesfully saved to 'customer.dat'");
                     orders.saveToFile();
-                    System.out.println("Order data has been succesfully saved to 'feast_order_service.dat'");
+                    System.out.println("The data is successfully saved");
                     break;
-
                 case 8:
-                    option = 0;
-                    System.out.println("Display customer or order lists");
-                    System.out.println("1. Customer list.");
-                    System.out.println("2. Order list");
-                    System.out.print("Enter your option: ");
-                    option = Integer.parseInt(sc.nextLine());
-                    switch (option) {
-
-                        case 1:
-                            customers.readFromFile();
-                            customers.showAll();
-                            break;
-                        case 2:
-                            orders.readFromFile();
-                            orders.showAll();
-                            break;
-                        default:
-                            System.out.println("Return to main menu...");
-                            break;
+                    Customers customers_temp = new Customers("./src/data/customers.dat");
+                    Orders orders_temp = new Orders("./src/data/feast_order_service.dat");
+                    if (!customers_temp.isEmpty()) {
+                        customers_temp.showAll();
+                    } else if (!orders_temp.isEmpty()) {
+                        orders_temp.showAll();
+                    } else {
+                        System.out.println("No data in the system!");
                     }
-
-                    break;
                 default:
                     System.out.println("Exit");
                     break;

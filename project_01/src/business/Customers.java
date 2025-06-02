@@ -1,6 +1,6 @@
 package business;
 
-import java.io.EOFException;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,29 +18,9 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     private String pathFile;
     private boolean isSaved;
 
-    public Customers(String pathFile, boolean isSaved) {
+    public Customers(String pathFile) {
         this.pathFile = pathFile;
-        this.isSaved = isSaved;
-    }
-
-    public Customers() {
-        super();
-        this.pathFile = "./src/data/customers.dat";
-        this.isSaved = true;
-//        readFromFile();
-
-        // tao 1 vai customer mau
-        this.add(new Customer("C0001", "Vo Anh Phat", "0901345599", "phatvo@gmail.com"));
-        this.add(new Customer("C0002", "Nguyen Thi Mai", "0912345678", "mainguyen@gmail.com"));
-        this.add(new Customer("g0003", "Tran Van Binh", "0987654321", "binhtv@yahoo.com"));
-        this.add(new Customer("K0004", "Le Hoang Nam", "0909123456", "namle@outlook.com"));
-        this.add(new Customer("c0005", "Pham Thi Lan", "0933445566", "lanpham@gmail.com"));
-        this.add(new Customer("G0006", "Dang Minh Tri", "0977889900", "tridang@hotmail.com"));
-        this.add(new Customer("k0007", "Hoang Bao Chau", "0966778899", "chauhb@gmail.com"));
-        this.add(new Customer("C0008", "Vo Thanh Dat", "0922334455", "datvo@gmail.com"));
-        this.add(new Customer("g0009", "Bui Kim Ngan", "0944221133", "nganbk@yahoo.com"));
-        this.add(new Customer("K0010", "Nguyen Van Son", "0955667788", "sonnguyen@zmail.com"));
-
+        this.readFromFile();
     }
 
     public boolean isDupplicate(Customer t) {
@@ -51,6 +31,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     public void addNew(Customer t) {
         if (!this.isDupplicate(t)) {
             this.add(t);
+            this.isSaved = false;
         } else {
             System.out.println("This customer already exist.");
         }
@@ -60,6 +41,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     public void update(Customer t) {
         this.remove(t);
         this.add(t);
+        this.isSaved = false;
     }
 
     @Override
@@ -100,64 +82,80 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     }
 
     public void saveToFile() {
+        // -- 0. Neu da luu roi thi khong luu nua
+        if (this.isSaved) {
+            return;
+        }
+
         FileOutputStream fos = null;
         try {
-            // 1. File
-            File f = new File(pathFile);
-            // 2. FileOutputStream
+            //-- 1. Tao File object
+            File f = new File(this.pathFile);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+
+            //-- 2. Tao FileutputStream
             fos = new FileOutputStream(f);
-            // 3. ObjectOutputStream
+
+            //-- 3. Tao oos
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            // 4. Lap de ghi du lieu
+
+            //-- 4. Ghi file
             for (Customer c : this) {
                 oos.writeObject(c);
             }
-            // 5. close
+            //-- 5. Dong cac objcet
             oos.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
+            //--6. Thay doi trang thai cua saved
+            this.isSaved = true;
+        } catch (Exception e) {
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             try {
                 fos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }
 
     public void readFromFile() {
-        File f = new File(pathFile);
-        if (!f.exists()) {
-            System.out.println("Cannot read data from customer.dat. Please check it.");
-
-        } else {
-            FileInputStream fis = null;
-            try {
+        FileInputStream fis = null;
+        try {
+            // B1 - Tao doi tuong file de anh xa len tap tin
+            File f = new File(this.pathFile);
+            // B2 - Kiem tra su ton tai cua file
+            if (!f.exists()) {
+                System.out.println("Cannot read data from " + this.pathFile + ". Please check it.");
+                return;
+            } else {
+                // B3 - Tao fis
                 fis = new FileInputStream(f);
+                // B4 - Tap ois
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                while (true) {
-                    try {
-                        Customer c = (Customer) ois.readObject();
-                        this.add(c);
-                    } catch (EOFException e) {
-                        break;
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
+                // B5 - Doc tung doi tuong
                 try {
-                    fis.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
+                    while (true) {
+                        Object o = ois.readObject();
+                        Customer customer = (Customer) o;
+                        this.addNew(customer);
+                    }
+                } catch (Exception e) {
                 }
+            }
+        } catch (FileNotFoundException e1) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e1);
+        } catch (IOException e2) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e2);
+        } catch (Exception e4) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e4);
+        } finally {
+            try {
+                fis.close();
+            } catch (Exception ex) {
             }
         }
     }
+
 }

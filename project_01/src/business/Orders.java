@@ -19,9 +19,9 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     String pathFile;
     boolean isSaved;
 
-    public Orders() {
-        this.pathFile = "./src/data/feast_order_service.dat";
-        this.isSaved = true;
+    public Orders(String pathFile) {
+        this.pathFile = pathFile;
+        this.readFromFile();
     }
 
     public boolean isDupplicate(Order t) {
@@ -32,6 +32,7 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     public void addNew(Order t) {
         if (!this.isDupplicate(t)) {
             this.add(t);
+            this.isSaved = false;
         }
     }
 
@@ -39,81 +40,17 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     public void update(Order t) {
         this.remove(t);
         this.add(t);
+        this.isSaved = false;
     }
 
     @Override
     public Order searchById(String id) {
         for (Order o : this) {
-            if (o.getOrderCode() == id) {
+            if (o.getOrderCode().equals(id)) {
                 return o;
             }
         }
         return null;
-
-    }
-
-    public void saveToFile() {
-        FileOutputStream fos = null;
-        try {
-            // 1. File
-            File f = new File(pathFile);
-            // 2. FileOutputStream
-            fos = new FileOutputStream(f);
-            // 3. ObjectOutputStream
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            // 4. Lap de ghi du lieu
-            for (Order o : this) {
-                oos.writeObject(o);
-            }
-            // 5. close
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    public void readFromFile() {
-        // 1. File
-        File f = new File(pathFile);
-        if (!f.exists()) {
-            System.out.println("The feast_order_service.dat is not exist!");
-        } else {
-            FileInputStream fis = null;
-            try {
-                // 2. FileInputStream
-                fis = new FileInputStream(f);
-                // 3. ObjectInputStream
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                // 4. Lap de doc du lieu
-                while (fis.available() > 0) {
-                    Order o = (Order) ois.readObject();
-                    this.add(o);
-                }
-                // 5. close
-                ois.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    fis.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        }
     }
 
     @Override
@@ -135,4 +72,80 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
         }
     }
 
+    public void saveToFile() {
+        // -- 0. Neu da luu roi thi khong luu nua
+        if (this.isSaved) {
+            return;
+        }
+
+        FileOutputStream fos = null;
+        try {
+            //-- 1. Tao File object
+            File f = new File(this.pathFile);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+
+            //-- 2. Tao FileutputStream
+            fos = new FileOutputStream(f);
+
+            //-- 3. Tao oos
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            //-- 4. Ghi file
+            for (Order o : this) {
+                oos.writeObject(o);
+            }
+            //-- 5. Dong cac objcet
+            oos.close();
+            //--6. Thay doi trang thai cua saved
+            this.isSaved = true;
+        } catch (Exception e) {
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            try {
+                fos.close();
+            } catch (Exception e) {
+                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+    }
+
+    public void readFromFile() {
+        FileInputStream fis = null;
+        try {
+            // B1 - Tao doi tuong file de anh xa len tap tin
+            File f = new File(this.pathFile);
+            // B2 - Kiem tra su ton tai cua file
+            if (!f.exists()) {
+                System.out.println("Cannot read data from " + this.pathFile + ". Please check it.");
+                return;
+            } else {
+                // B3 - Tao fis
+                fis = new FileInputStream(f);
+                // B4 - Tap ois
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                // B5 - Doc tung doi tuong
+                try {
+                    while (true) {
+                        Object o = ois.readObject();
+                        Order order = (Order) o;
+                        this.addNew(order);
+                    }
+                } catch (Exception e) {
+                }
+            }
+        } catch (FileNotFoundException e1) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e1);
+        } catch (IOException e2) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e2);
+        } catch (Exception e3) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e3);
+        } finally {
+            try {
+                fis.close();
+            } catch (Exception ex) {
+            }
+        }
+    }
 }

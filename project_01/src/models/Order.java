@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class Order implements Comparable<Order> {
+public class Order implements Serializable {
 
     private String orderId;
     private String customerId;
@@ -120,8 +120,8 @@ public class Order implements Comparable<Order> {
         System.out.format("%-16s: %,d Vnd\n", "Total cost", (int) s.getPrice() * this.getNumOfTables());
     }
 
-    @Override
-    public int compareTo(Order that) {
-        return this.eventDate.compareTo(that.eventDate);
-    }
+//    @Override
+//    public int compareTo(Order that) {
+//        return this.eventDate.compareTo(that.eventDate);
+//    }
 }
