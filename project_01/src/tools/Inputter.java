@@ -66,7 +66,6 @@ public class Inputter {
         String pattern = Acceptable.CUST_ID_VALID;
         if (!isUpdated) {
             customer.setCustomerId(input(msg, errorMsg, pattern).toUpperCase());
-
         }
 
         msg = "Enter name: ";

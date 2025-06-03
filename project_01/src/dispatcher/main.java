@@ -133,21 +133,34 @@ public class main {
                     System.out.println("The data is successfully saved");
                     break;
                 case 8:
+                    int choose = 0;
                     Customers customers_temp = new Customers("./src/data/customers.dat");
                     Orders orders_temp = new Orders("./src/data/feast_order_service.dat");
-                    if (!customers_temp.isEmpty()) {
-                        customers_temp.showAll();
-                    } else if (!orders_temp.isEmpty()) {
-                        orders_temp.showAll();
-                    } else {
-                        System.out.println("No data in the system!");
+                    System.out.println("1. Customer list.");
+                    System.out.println("2. Order list.");
+                    System.out.print("Enter your option: ");
+                    choose = Integer.parseInt(sc.nextLine());
+                    switch (choose) {
+                        case 1:
+                            if (!customers_temp.isEmpty()) {
+                                customers_temp.showAll();
+                            }
+                            break;
+                        case 2:
+                            if (!orders_temp.isEmpty()) {
+                                orders_temp.showAll();
+                                break;
+                            }
+                        default:
+                            System.out.println("No data in the system!");
+                            break;
                     }
+                    break;
                 default:
                     System.out.println("Exit");
                     break;
+
             }
         } while (testCase >= 1 && testCase <= 8);
-
     }
-
 }

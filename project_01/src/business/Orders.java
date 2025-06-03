@@ -55,17 +55,16 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
 
     @Override
     public void showAll() {
-        SetMenus setmenus = null;
-        showAll(this, setmenus);
+        showAll(this);
     }
 
-    public void showAll(ArrayList<Order> o, SetMenus setmenus) {
+    public void showAll(ArrayList<Order> o) {
         System.out.println("----------------------------------------------------");
         System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10s\n",
                 "ID", "Event Date", "Customer ID", "Set Menu", "Price", "Tables", "Cost");
         System.out.println("----------------------------------------------------");
-        for (Iterator<Order> it = this.iterator(); it.hasNext();) {
-            Order ord = it.next();
+        for (Order ord : o) {
+            SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
             SetMenu s = setmenus.searchById(ord.getMenuId());
             System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10,d\n",
                     ord.getCustomerId(), ord.getEventDate(), ord.getCustomerId(), ord.getMenuId(), (int) s.getPrice(), ord.getNumOfTables(), (int) ord.getNumOfTables() * s.getPrice());
