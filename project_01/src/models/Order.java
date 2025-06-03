@@ -120,6 +120,13 @@ public class Order implements Serializable {
         System.out.format("%-16s: %,d Vnd\n", "Total cost", (int) s.getPrice() * this.getNumOfTables());
     }
 
+    public void display02(Customers customers, SetMenus setMenus) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SetMenu s = setMenus.searchById(this.getMenuId());
+        System.out.format("%-5s | %-10s | %-11s | %-8s | %,d | %-6s | %,d\n",
+                this.getCustomerId(), sdf.format(this.getEventDate()), this.getCustomerId(), this.getMenuId(), (int) s.getPrice(), this.getNumOfTables(), (int) s.getPrice() * this.getNumOfTables());
+    }
+
 //    @Override
 //    public int compareTo(Order that) {
 //        return this.eventDate.compareTo(that.eventDate);

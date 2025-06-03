@@ -8,16 +8,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Order;
 import models.SetMenu;
+import tools.Inputter;
 
 public class Orders extends ArrayList<Order> implements Workable<Order, String> {
 
     String pathFile;
     boolean isSaved;
+    int option = 0;
 
     public Orders(String pathFile) {
         this.pathFile = pathFile;
@@ -59,15 +61,15 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     }
 
     public void showAll(ArrayList<Order> o) {
-        System.out.println("----------------------------------------------------");
-        System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10s\n",
+        Customers customers = new Customers("./src/data/customers.dat");
+        SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
+
+        System.out.println("-----------------------------------------------------------------------------");
+        System.out.format("%-5s | %-10s | %-11s | %-8s | %-9s | %-6s | %-10s\n",
                 "ID", "Event Date", "Customer ID", "Set Menu", "Price", "Tables", "Cost");
-        System.out.println("----------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------");
         for (Order ord : o) {
-            SetMenus setmenus = new SetMenus("./src/data/FeastMenu.csv");
-            SetMenu s = setmenus.searchById(ord.getMenuId());
-            System.out.format("%-5s | %-10s | %-11s | %-8s | %-9,d | %-6s | %-10,d\n",
-                    ord.getCustomerId(), ord.getEventDate(), ord.getCustomerId(), ord.getMenuId(), (int) s.getPrice(), ord.getNumOfTables(), (int) ord.getNumOfTables() * s.getPrice());
+            ord.display02(customers, setmenus);
         }
     }
 
@@ -146,5 +148,22 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
             } catch (Exception ex) {
             }
         }
+    }
+
+    public void func05(Inputter ip, Scanner sc, Customers customers, SetMenus setmenus) {
+        option = 0;
+        do {
+            Order order = ip.inputOrder(customers, setmenus, false);
+            if (this.contains(order)) {
+                System.out.println("Dupplicate data !");
+            } else {
+                this.addNew(order);
+                order.display(customers, setmenus);
+            }
+            System.out.println("1. Continue your order");
+            System.out.println("2. Return to main menu");
+            System.out.print("Enter your option: ");
+            option = Integer.parseInt(sc.nextLine());
+        } while (option != 2);
     }
 }

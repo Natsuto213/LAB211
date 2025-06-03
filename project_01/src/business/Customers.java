@@ -1,6 +1,5 @@
 package business;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,14 +8,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Customer;
+import tools.Inputter;
 
-public class Customers extends HashSet<Customer> implements Workable<Customer, String> {
+public final class Customers extends HashSet<Customer> implements Workable<Customer, String> {
 
-    private String pathFile;
+    private final String pathFile;
     private boolean isSaved;
+    int option = 0;
 
     public Customers(String pathFile) {
         this.pathFile = pathFile;
@@ -82,6 +84,7 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
     }
 
     public void saveToFile() {
+
         // -- 0. Neu da luu roi thi khong luu nua
         if (this.isSaved) {
             return;
@@ -156,6 +159,55 @@ public class Customers extends HashSet<Customer> implements Workable<Customer, S
             } catch (Exception ex) {
             }
         }
+    }
+
+    public void func01(Inputter ip, Scanner sc) {
+        option = 0;
+        do {
+            this.addNew(ip.inputCustomer(false));
+            System.out.println("1. Continue entering new customer.");
+            System.out.println("2. Return to main menu");
+            System.out.print("Enter your option: ");
+            option = Integer.parseInt(sc.nextLine());
+        } while (option != 2);
+    }
+
+    public void func02(Inputter ip, Scanner sc) {
+        option = 0;
+        do {
+            System.out.print("Input customer code: ");
+            String customerCode = sc.nextLine();
+            Customer c = this.searchById(customerCode);
+            if (c == null) {
+                System.out.println("This customer does not exist.\n");
+            } else {
+                Customer customer = ip.inputCustomer(true);
+                customer.setCustomerId(customerCode);
+                this.update(customer);
+            }
+            System.out.println("1. Continue updating new customer.");
+            System.out.println("2. Return to main menu");
+            System.out.print("Enter your option: ");
+            option = Integer.parseInt(sc.nextLine());
+        } while (option != 2);
+    }
+
+    public void func03(Scanner sc) {
+        option = 0;
+        do {
+            System.out.print("Input customer name: ");
+            String name = sc.nextLine();
+            HashSet<Customer> cs = this.filterByName(name);
+            if (cs.isEmpty()) {
+                System.out.println("No one matches the search critearia.");
+            } else {
+                this.showAll(cs);
+            }
+            System.out.println("1. Continue search");
+            System.out.println("2. Return to main menu");
+            System.out.print("Enter your option: ");
+            option = Integer.parseInt(sc.nextLine());
+        } while (option != 2);
     }
 
 }

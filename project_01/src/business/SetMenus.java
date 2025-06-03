@@ -97,4 +97,12 @@ public class SetMenus extends TreeMap<String, SetMenu> {
         return this.containsKey(id);
     }
 
+    public void func04() {
+        try {
+            this.readFromFile();
+        } catch (Exception e) {
+        }
+        this.showAll();
+    }
+
 }
