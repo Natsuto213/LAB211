@@ -72,7 +72,7 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
     }
 
     public HashSet<Customer> filterByName(String name) {
-        HashSet<Customer> result = new HashSet<>();
+        HashSet<Customer> result = new HashSet();
         for (Customer c : this) {
             String cName = c.getName().toUpperCase();
             String kName = name.toUpperCase();
@@ -195,19 +195,20 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
     public void func03(Scanner sc) {
         option = 0;
         do {
-            System.out.print("Input customer name: ");
+            System.out.print("Enter customer Name: ");
             String name = sc.nextLine();
-            HashSet<Customer> cs = this.filterByName(name);
-            if (cs.isEmpty()) {
-                System.out.println("No one matches the search critearia.");
+            HashSet<Customer> find = filterByName(name);
+            if (find.isEmpty()) {
+                System.out.println("The customer is not exist!");
             } else {
-                this.showAll(cs);
+                showAll(find);
             }
-            System.out.println("1. Continue search");
-            System.out.println("2. Return to main menu");
+            System.out.println("1. Continue search.");
+            System.out.println("2. Return to main menu.");
             System.out.print("Enter your option: ");
             option = Integer.parseInt(sc.nextLine());
         } while (option != 2);
+
     }
 
 }

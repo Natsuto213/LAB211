@@ -12,7 +12,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Order;
-import models.SetMenu;
 import tools.Inputter;
 
 public class Orders extends ArrayList<Order> implements Workable<Order, String> {

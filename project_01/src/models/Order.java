@@ -18,8 +18,8 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(String customerId, String codeOfSetMenu, int numOfTables, Date eventDate) {
-        this.orderId = generateOrderCode();
+    public Order(String orderId, String customerId, String codeOfSetMenu, int numOfTables, Date eventDate) {
+        this.orderId = orderId;
         this.customerId = customerId;
         this.codeOfSetMenu = codeOfSetMenu;
         this.numOfTables = numOfTables;
@@ -64,12 +64,6 @@ public class Order implements Serializable {
 
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
-    }
-
-    public String generateOrderCode() {
-        Date now = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-        return sdf.format(now);
     }
 
     @Override

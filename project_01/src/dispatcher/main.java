@@ -72,7 +72,7 @@ public class main {
                 case 7:
                     customers.saveToFile();
                     orders.saveToFile();
-                    System.out.println("---------------------------");
+                    System.out.println("------------------------------");
                     System.out.println("The data is successfully saved");
                     break;
                 case 8:
