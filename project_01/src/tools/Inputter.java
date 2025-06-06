@@ -91,21 +91,22 @@ public class Inputter {
 
         //CustomerId
         String customerCode = "";
-        boolean checkCustomerCode = false;
-        do {
-            String msg = "Enter Customer Code: ";
-            String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
-            String pattern = Acceptable.CUST_ID_VALID;
-            if (!updated) {
-                customerCode = input(msg, errorMsg, pattern).toUpperCase();
-            }
+        if (!updated) {
+            boolean checkCustomerCode = false;
+            do {
+                String msg = "Enter Customer Code: ";
+                String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
+                String pattern = Acceptable.CUST_ID_VALID;
 
-            if (customers.searchById(customerCode) != null) {
-                checkCustomerCode = true;
-            } else {
-                System.out.println("Customer is not exists!");
-            }
-        } while (!checkCustomerCode);
+                customerCode = input(msg, errorMsg, pattern).toUpperCase();
+                if (customers.searchById(customerCode) != null) {
+                    checkCustomerCode = true;
+                } else {
+                    System.out.println("Customer is not exists!");
+                }
+
+            } while (!checkCustomerCode);
+        }
 
         // SetMenuID
         String setMenuCode = "";
@@ -116,7 +117,7 @@ public class Inputter {
             if (setmenus.contains(setMenuCode)) {
                 checkSetMenu = true;
             } else {
-                System.out.println("SetMen Code is not exists!");
+                System.out.println("SetMenu Code is not exists!");
             }
         } while (!checkSetMenu);
 
