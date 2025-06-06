@@ -4,11 +4,9 @@ import business.Customers;
 import business.Orders;
 import business.SetMenus;
 import java.util.Scanner;
-import models.Order;
 import tools.Inputter;
 
 public class main {
-
     public static void main(String[] args) {
         Inputter ip = new Inputter();
         Scanner sc = new Scanner(System.in);
@@ -49,25 +47,7 @@ public class main {
                     orders.func05(ip, sc, customers, setmenus);
                     break;
                 case 6:
-                    option = 0;
-                    do {
-                        System.out.print("Enter order ID: ");
-                        String orderID = sc.nextLine();
-                        Order o = orders.searchById(orderID);
-                        if (o == null) {
-                            System.out.println("This Order does not exist.");
-                        } else {
-                            Order order = ip.inputOrder(customers, setmenus, true);
-                            order.setOrderCode(orderID);
-                            orders.update(order);
-                            System.out.println("Update successful.");
-                        }
-                        System.out.println("1. Continue update your order.");
-                        System.out.println("2. Return to main menu");
-                        System.out.print("Enter your option: ");
-                        option = Integer.parseInt(sc.nextLine());
-                    } while (option != 2);
-
+                    orders.func06(ip, sc, orders, customers, setmenus);
                     break;
                 case 7:
                     customers.saveToFile();
@@ -76,35 +56,39 @@ public class main {
                     System.out.println("The data is successfully saved");
                     break;
                 case 8:
-                    int choose = 0;
-                    Customers customers_temp = new Customers("./src/data/customers.dat");
-                    Orders orders_temp = new Orders("./src/data/feast_order_service.dat");
-
-                    System.out.println("---------------------------");
-                    System.out.println("1. Customer list.");
-                    System.out.println("2. Order list.");
-                    System.out.print("Enter your option: ");
-                    choose = Integer.parseInt(sc.nextLine());
-                    switch (choose) {
-                        case 1:
-                            if (!customers_temp.isEmpty()) {
-                                customers_temp.showAll();
-                            }
-                            break;
-                        case 2:
-                            if (!orders_temp.isEmpty()) {
-                                orders_temp.showAll();
-                                break;
-                            }
-                        default:
-                            System.out.println("No data in the system!");
-                            break;
-                    }
+                    func08(sc);
                     break;
                 default:
                     System.out.println("Exit");
                     break;
             }
         } while (testCase >= 1 && testCase <= 8);
+    }
+
+    private static void func08(Scanner sc) {
+        int choose = 0;
+        Customers customers_temp = new Customers("./src/data/customers.dat");
+        Orders orders_temp = new Orders("./src/data/feast_order_service.dat");
+
+        System.out.println("---------------------------");
+        System.out.println("1. Customer list.");
+        System.out.println("2. Order list.");
+        System.out.print("Enter your option: ");
+        choose = Integer.parseInt(sc.nextLine());
+        switch (choose) {
+            case 1:
+                if (!customers_temp.isEmpty()) {
+                    customers_temp.showAll();
+                }
+                break;
+            case 2:
+                if (!orders_temp.isEmpty()) {
+                    orders_temp.showAll();
+                    break;
+                }
+            default:
+                System.out.println("No data in the system!");
+                break;
+        }
     }
 }

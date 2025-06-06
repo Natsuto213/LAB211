@@ -25,53 +25,48 @@ public class SetMenus extends TreeMap<String, SetMenu> {
     }
 
     public void readFromFile() {
-        File f = new File(pathFile);
-        if (!f.exists()) {
-            System.out.println("Cannot read data from feastMenu.csv. Please check it.");
-        } else {
-            FileInputStream fis = null;
-            try {
-                fis = new FileInputStream(f);
-                InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-                BufferedReader br = new BufferedReader(isr);
-                String temp = "";
-                while ((temp = br.readLine()) != null) {
-                    SetMenu sm = dataToObject(temp);
-                    if (sm != null) {
-                        this.put(sm.getMenuId(), sm);
-                    }
+        FileInputStream fis = null;
+        try {
+            File f = new File(pathFile);
+            fis = new FileInputStream(f);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String temp = "";
+            while ((temp = br.readLine()) != null) {
+                SetMenu sm = dataToObject(temp);
+                if (sm != null) {
+                    this.put(sm.getMenuId(), sm);
                 }
-                br.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            br.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fis.close();
             } catch (IOException ex) {
                 Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    fis.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
 
     }
 
-    public SetMenu dataToObject(String temp) {
+    private SetMenu dataToObject(String temp) {
         SetMenu sm = null;
-        String[] strs = temp.split(",");
-        if (strs.length >= 4) {
+        String[] word = temp.split(",");
+
+        if (word.length >= 4) {
             try {
-                String menuId = strs[0];
-                String name = strs[1];
-                double price = Double.parseDouble(strs[2]);
-                String ingredients = strs[3];
-                if (ingredients.startsWith("\"") && ingredients.endsWith("\"")) {
-                    ingredients = ingredients.substring(1, ingredients.length() - 1);
+                String menuId = word[0];
+                String name = word[1];
+                Double price = Double.parseDouble(word[2]);
+                String ingredient = word[3];
+                if (ingredient.startsWith("\"") && ingredient.endsWith("\"")) {
+                    ingredient = ingredient.substring(1, ingredient.length() - 1);
                 }
-                sm = new SetMenu(menuId, name, price, ingredients);
+                sm = new SetMenu(menuId, name, price, ingredient);
             } catch (Exception e) {
             }
         }
@@ -100,6 +95,7 @@ public class SetMenus extends TreeMap<String, SetMenu> {
     public void func04() {
         try {
             this.readFromFile();
+
         } catch (Exception e) {
         }
         this.showAll();

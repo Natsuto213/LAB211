@@ -165,4 +165,25 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
             option = Integer.parseInt(sc.nextLine());
         } while (option != 2);
     }
+
+    public void func06(Inputter ip, Scanner sc, Orders orders, Customers customers, SetMenus setmenus) {
+        option = 0;
+        do {
+            System.out.print("Enter order ID: ");
+            String orderID = sc.nextLine();
+            Order o = this.searchById(orderID);
+            if (o == null) {
+                System.out.println("This Order does not exist.");
+            } else {
+                Order order = ip.inputOrder(customers, setmenus, true);
+                order.setOrderCode(orderID);
+                this.update(order);
+                System.out.println("Update successful.");
+            }
+            System.out.println("1. Continue update your order.");
+            System.out.println("2. Return to main menu");
+            System.out.print("Enter your option: ");
+            option = Integer.parseInt(sc.nextLine());
+        } while (option != 2);
+    }
 }
