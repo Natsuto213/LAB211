@@ -84,41 +84,37 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
     }
 
     public void saveToFile() {
-
-        // -- 0. Neu da luu roi thi khong luu nua
-        if (this.isSaved) {
+        // 0. Save r thi thoi
+        if (isSaved) {
             return;
         }
 
         FileOutputStream fos = null;
         try {
-            //-- 1. Tao File object
-            File f = new File(this.pathFile);
-            if (!f.exists()) {
+            // 1. Tao file object
+            File f = new File(pathFile);
+            if (!f.exists()) { // Kh co file thi tao file moi
                 f.createNewFile();
             }
-
-            //-- 2. Tao FileutputStream
+            //2. Tao File output stream
             fos = new FileOutputStream(f);
-
-            //-- 3. Tao oos
+            // 3. Tao object output stream
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            //-- 4. Ghi file
+            // 4. Ghi file
             for (Customer c : this) {
                 oos.writeObject(c);
             }
-            //-- 5. Dong cac objcet
+
+            // 5. Dong cac object
             oos.close();
-            //--6. Thay doi trang thai cua saved
             this.isSaved = true;
-        } catch (Exception e) {
-            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception ex) {
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 fos.close();
-            } catch (Exception e) {
-                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e);
+            } catch (Exception ex) {
+                Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -126,33 +122,34 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
     public void readFromFile() {
         FileInputStream fis = null;
         try {
-            // B1 - Tao doi tuong file de anh xa len tap tin
-            File f = new File(this.pathFile);
-            // B2 - Kiem tra su ton tai cua file
+            // 1. Tao File
+            File f = new File(pathFile);
             if (!f.exists()) {
-                System.out.println("Cannot read data from " + this.pathFile + ". Please check it.");
+                System.out.println("Cannot read file from " + this.pathFile + " Please check again!");
                 return;
-            } else {
-                // B3 - Tao fis
-                fis = new FileInputStream(f);
-                // B4 - Tap ois
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                // B5 - Doc tung doi tuong
-                try {
-                    while (true) {
-                        Object o = ois.readObject();
-                        Customer customer = (Customer) o;
-                        this.addNew(customer);
-                    }
-                } catch (Exception e) {
-                }
             }
+            // 2. Tao File Input Stream
+            fis = new FileInputStream(f);
+            // 3. Tao Object Input Stream
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            //4. Doc File
+            try {
+                while (true) {
+                    Object o = ois.readObject();
+                    Customer c = (Customer) o;
+                    this.addNew(c);
+                }
+            } catch (Exception e) {
+            }
+            // 5. Dong cac Object
+            ois.close();
         } catch (FileNotFoundException e1) {
-            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e1);
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e1);
         } catch (IOException e2) {
-            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e2);
-        } catch (Exception e4) {
-            Logger.getLogger(SetMenus.class.getName()).log(Level.SEVERE, null, e4);
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e2);
+        } catch (Exception e3) {
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, e3);
         } finally {
             try {
                 fis.close();

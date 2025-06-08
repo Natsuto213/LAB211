@@ -74,6 +74,7 @@ public class Order implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.orderId);
         return hash;
     }
 
@@ -89,14 +90,10 @@ public class Order implements Serializable {
             return false;
         }
         final Order other = (Order) obj;
-        if (!Objects.equals(this.customerId, other.customerId)) {
-            return false;
-        }
-        if (!Objects.equals(this.codeOfSetMenu, other.codeOfSetMenu)) {
-            return false;
-        }
-        return Objects.equals(this.eventDate, other.eventDate);
+        return Objects.equals(this.orderId, other.orderId);
     }
+
+  
 
     public void display(Customers customers, SetMenus setMenus) {
         System.out.println("---------------------------------");
@@ -121,6 +118,9 @@ public class Order implements Serializable {
                 this.getCustomerId(), sdf.format(this.getEventDate()), this.getCustomerId(), this.getMenuId(), (int) s.getPrice(), this.getNumOfTables(), (int) s.getPrice() * this.getNumOfTables());
     }
 
+    
+    
+    
 //    @Override
 //    public int compareTo(Order that) {
 //        return this.eventDate.compareTo(that.eventDate);

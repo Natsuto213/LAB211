@@ -87,7 +87,7 @@ public class Inputter {
         return customer;
     }
 
-    public Order inputOrder(Customers customers, SetMenus setmenus, boolean updated) {
+    public Order inputOrder(Customers customers, SetMenus setmenus, boolean updated, String updatedCustomerCode) {
 
         //CustomerId
         String customerCode = "";
@@ -106,6 +106,8 @@ public class Inputter {
                 }
 
             } while (!checkCustomerCode);
+        }else{
+            customerCode = updatedCustomerCode;
         }
 
         // SetMenuID
