@@ -4,7 +4,6 @@ import business.Customers;
 import business.Orders;
 import business.SetMenus;
 import java.util.Scanner;
-import models.Customer;
 import tools.Inputter;
 
 public class main {
@@ -46,10 +45,10 @@ public class main {
                     setmenus.func04();
                     break;
                 case 5:
-                    orders.func05(ip, sc, customers, setmenus);
+                    orders.func05(customers, setmenus, ip, sc);
                     break;
                 case 6:
-                    orders.func06(ip, sc, orders, customers, setmenus);
+                    orders.func06(ip, sc, customers, setmenus);
                     break;
                 case 7:
                     customers.saveToFile();
@@ -61,11 +60,11 @@ public class main {
                     int choose;
                     Customers customers_temp = new Customers("./src/data/customers.dat");
                     Orders orders_temp = new Orders("./src/data/feast_order_service.dat");
+
                     System.out.println("-----------------------");
                     System.out.println("1. Customer list");
                     System.out.println("2. Order list");
                     System.out.print("Enter your option: ");
-
                     choose = Integer.parseInt(sc.nextLine());
 
                     switch (choose) {
@@ -88,6 +87,10 @@ public class main {
                             System.out.println("No data in the system!");
                     }
                     break;
+                default:
+                    System.out.println("Exit, bye bye...");
+                    break;
+
             }
         } while (testCase >= 1 && testCase <= 8);
     }

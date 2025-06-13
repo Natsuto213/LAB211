@@ -36,6 +36,7 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
             this.isSaved = false;
         } else {
             System.out.println("This customer already exist.");
+
         }
     }
 
@@ -162,7 +163,7 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
         option = 0;
         do {
             this.addNew(ip.inputCustomer(false));
-            System.out.println("1. Continue entering new customer.");
+            System.out.println("1. Continue add more customer.");
             System.out.println("2. Return to main menu");
             System.out.print("Enter your option: ");
             option = Integer.parseInt(sc.nextLine());
@@ -172,21 +173,25 @@ public final class Customers extends HashSet<Customer> implements Workable<Custo
     public void func02(Inputter ip, Scanner sc) {
         option = 0;
         do {
-            System.out.print("Input customer code: ");
+            System.out.print("Enter customer code: ");
             String customerCode = sc.nextLine();
             Customer c = this.searchById(customerCode);
-            if (c == null) {
-                System.out.println("This customer does not exist.\n");
-            } else {
+            if (c != null) {
                 Customer customer = ip.inputCustomer(true);
                 customer.setCustomerId(customerCode);
+                customer.setPhone(c.getPhone());
+                customer.setEmail(c.getEmail());
                 this.update(customer);
+                System.out.println("Update successfull");
+            } else {
+                System.out.println("This customer does not exitst.");
             }
-            System.out.println("1. Continue updating new customer.");
+            System.out.println("1. Continue update your customer.");
             System.out.println("2. Return to main menu");
             System.out.print("Enter your option: ");
             option = Integer.parseInt(sc.nextLine());
         } while (option != 2);
+
     }
 
     public void func03(Scanner sc) {

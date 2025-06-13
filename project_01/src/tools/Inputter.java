@@ -16,7 +16,7 @@ public class Inputter {
     private Scanner sc;
 
     public Inputter() {
-        sc = new Scanner(System.in);
+        this.sc = new Scanner(System.in);
     }
 
     public String getString(String msg) {
@@ -46,14 +46,17 @@ public class Inputter {
         return result;
     }
 
-    public String input(String msg, String errMsg, String pattern) {
+    public String input(String msg, String errorMsg, String pattern) {
         String input;
         boolean more = true;
         do {
             input = getString(msg);
+            if(input.isEmpty()){
+               break;
+            }
             more = !Acceptable.isValid(input, pattern);
             if (more) {
-                System.out.println(errMsg + "Please try again!");
+                System.out.println(errorMsg + " Please try again.");
             }
         } while (more);
         return input;
@@ -62,95 +65,92 @@ public class Inputter {
     public Customer inputCustomer(boolean isUpdated) {
         Customer customer = new Customer();
 
-        String msg = "Enter customer id: ";
-        String errMsg = "Invalid customer id. ";
-        String pattern = Acceptable.CUST_ID_VALID;
+        String msg = "Enter customer code: ";
+        String errorMsg = "Customer code is invalid.";
+        String pattern = Acceptable.CUSTOMER_ID_VALID;
         if (!isUpdated) {
-            customer.setCustomerId(input(msg, errMsg, pattern));
+            customer.setCustomerId(input(msg, errorMsg, pattern));
         }
 
         msg = "Enter customer name: ";
-        errMsg = "Invalid customer name. ";
-        pattern = Acceptable.CUST_NAME_VALID;
-        customer.setName(input(msg, errMsg, pattern));
+        errorMsg = "Customer name is invalid.";
+        pattern = Acceptable.NAME_VALID;
+        customer.setName(input(msg, errorMsg, pattern));
 
         msg = "Enter customer phone: ";
-        errMsg = "Invalid customer phone. ";
+        errorMsg = "Customer phone is invalid.";
         pattern = Acceptable.PHONE_VALID;
-        customer.setPhone(input(msg, errMsg, pattern));
+        customer.setPhone(input(msg, errorMsg, pattern));
 
         msg = "Enter customer email: ";
-        errMsg = "Invalid customer email. ";
+        errorMsg = "Customer email is invalid.";
         pattern = Acceptable.EMAIL_VALID;
-        customer.setEmail(input(msg, errMsg, pattern));
+        customer.setEmail(input(msg, errorMsg, pattern));
 
         return customer;
     }
 
-    public Order inputOrder(Customers customers, SetMenus setmenus, boolean updated, String updatedCustomerCode) {
-
-        //CustomerId
+    public Order inputOrder(Customers customers, SetMenus setmenus, boolean isUpdated, String updatedCustomerCode) {
+        //customerCode
         String customerCode = "";
-        if (!updated) {
-            boolean checkCustomerCode = false;
+        boolean check = false;
+        if (!isUpdated) {
             do {
-                String msg = "Enter Customer Code: ";
-                String errorMsg = "Customer code cannot be empty! Customer code must start with C, G, K, followed by 4 digits!";
-                String pattern = Acceptable.CUST_ID_VALID;
+                String msg = "Enter customer code: ";
+                String errorMsg = "Customer code is invalid.";
+                String pattern = Acceptable.CUSTOMER_ID_VALID;
 
-                customerCode = input(msg, errorMsg, pattern).toUpperCase();
+                customerCode = input(msg, errorMsg, pattern);
                 if (customers.searchById(customerCode) != null) {
-                    checkCustomerCode = true;
+                    check = true;
                 } else {
-                    System.out.println("Customer is not exists!");
+                    System.out.println("Customer is not exist!");
                 }
-
-            } while (!checkCustomerCode);
-        }else{
+            } while (!check);
+        } else {
             customerCode = updatedCustomerCode;
         }
-
-        // SetMenuID
+        // setMenuCode
         String setMenuCode = "";
-        boolean checkSetMenu = false;
+        check = false;
         do {
-            System.out.print("Enter SetMenu code: ");
+            System.out.print("Enter set menu code: ");
             setMenuCode = sc.nextLine();
             if (setmenus.contains(setMenuCode)) {
-                checkSetMenu = true;
+                check = true;
             } else {
-                System.out.println("SetMenu Code is not exists!");
+                System.out.println("Set menu code is not exist!");
             }
-        } while (!checkSetMenu);
+        } while (!check);
 
-        // Number of table
+        // numberOfTables
         int numberOfTable = 0;
-        String msg = "Enter number of tables: ";
-        String errorMsg = "Number of tables must be greater than zero!";
+        String msg = "Enter number of table: ";
+        String errorMsg = "The number of table must be greater than zero.";
         String pattern = Acceptable.POST_INT;
         numberOfTable = Integer.parseInt(input(msg, errorMsg, pattern));
 
-        // Event date
+        // eventDate
         Date eventDate = null;
-        boolean checkEventDate = false;
+        check = false;
         do {
             try {
-                System.out.print("Enter preferred date: ");
+                System.out.print("Enter referred date: ");
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 String inputDate = sc.nextLine().trim();
                 eventDate = sdf.parse(inputDate);
                 Date today = new Date();
                 if (eventDate.after(today)) {
-                    checkEventDate = true;
+                    check = true;
                 } else {
                     System.out.println("The preferred event date must be in the future!");
                 }
             } catch (ParseException ex) {
                 Logger.getLogger(Inputter.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (!checkEventDate);
+        } while (!check);
 
-        // Order id
+        // orderCode
         String orderId = null;
         Date now = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");

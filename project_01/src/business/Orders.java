@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Customer;
 import models.Order;
 import tools.Inputter;
 
@@ -34,7 +33,8 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
     public void addNew(Order t) {
         if (!this.isDupplicate(t)) {
             this.add(t);
-            this.isSaved = false;
+        } else {
+            System.out.println("This order already exitst");
         }
     }
 
@@ -146,41 +146,43 @@ public class Orders extends ArrayList<Order> implements Workable<Order, String> 
         }
     }
 
-    public void func05(Inputter ip, Scanner sc, Customers customers, SetMenus setmenus) {
+    public void func05(Customers customers, SetMenus setmenus, Inputter ip, Scanner sc) {
         option = 0;
         do {
             Order order = ip.inputOrder(customers, setmenus, false, "");
             if (this.contains(order)) {
-                System.out.println("Dupplicate data !");
+                System.out.println("Dupplicate data");
             } else {
                 this.addNew(order);
                 order.display(customers, setmenus);
             }
-            System.out.println("1. Continue your order");
+            System.out.println("1. Add new order");
             System.out.println("2. Return to main menu");
             System.out.print("Enter your option: ");
             option = Integer.parseInt(sc.nextLine());
         } while (option != 2);
     }
 
-    public void func06(Inputter ip, Scanner sc, Orders orders, Customers customers, SetMenus setmenus) {
+    public void func06(Inputter ip, Scanner sc, Customers customers, SetMenus setmenus) {
         option = 0;
         do {
-            System.out.print("Enter order ID: ");
-            String orderID = sc.nextLine();
-            Order o = this.searchById(orderID);
+            System.out.print("Enter order id: ");
+            String orderId = sc.nextLine();
+            Order o = this.searchById(orderId);
             if (o == null) {
-                System.out.println("This Order does not exist.");
+                System.out.println("This order does not exist");
             } else {
                 Order order = ip.inputOrder(customers, setmenus, true, o.getCustomerId());
-                order.setOrderCode(orderID);
+                order.setOrderCode(orderId);
                 this.update(order);
-                System.out.println("Update successful.");
+                System.out.println("Update successful");
             }
-            System.out.println("1. Continue update your order.");
+            System.out.println("1. Continue update your order");
             System.out.println("2. Return to main menu");
             System.out.print("Enter your option: ");
             option = Integer.parseInt(sc.nextLine());
         } while (option != 2);
+
     }
+
 }
