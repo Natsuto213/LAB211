@@ -10,12 +10,35 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.Room;
+import tools.Acceptable;
 
 public class Rooms extends TreeMap<String, Room> {
 
     private String pathFile;
 
+    public Rooms(String pathFile) {
+        this.pathFile = pathFile;
+    }
+
+    public void showAll() {
+        if (!this.values().isEmpty()) {
+            System.out.format("%-6s | %-16s | %-8s | %-6s | %-8s | %-22s\n",
+                    "RoomID", "RoomName", "Type", "Rate", "Capacity", "Furniture");
+            System.out.println("-------+------------------+----------+--------+----------+---------------------------------------");
+            for (Room rm : this.values()) {
+                System.out.println(rm);
+            }
+        } else {
+            System.out.println("--------------------------------------");
+            System.out.println("Room list is currently empty, not loaded yet.");
+            System.out.println("--------------------------------------");
+        }
+
+    }
+
     public void readFromFile() {
+        int successful = 0, fail = 0;
+
         FileInputStream fis = null;
         try {
             // 1. Tao file
@@ -25,14 +48,26 @@ public class Rooms extends TreeMap<String, Room> {
             }
             fis = new FileInputStream(f);
             InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            String temp = "";
-            while ((temp = br.readLine()) != null) {
-                Room r = dataToObject(temp);
-                if (r != null) {
-                    this.put(r.getRoomID(), r);
+            try ( BufferedReader br = new BufferedReader(isr)) {
+                String temp = "";
+                while ((temp = br.readLine()) != null) {
+                    Room room = dataToObject(temp);
+                    if (room != null) { // Room is not empty
+                        if (this.containsKey(room.getRoomID())) { // Same RoomID
+                            fail++;
+                        } else {
+                            successful++;
+                            this.put(room.getRoomID(), room);
+                        }
+                    } else {
+                        fail++;
+                    }
                 }
             }
+            System.out.println("--------------------------------------");
+            System.out.println(successful + " rooms succesfully loaded.");
+            System.out.println(fail + " entries failed.");
+            System.out.println("--------------------------------------");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Rooms.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -47,20 +82,44 @@ public class Rooms extends TreeMap<String, Room> {
     }
 
     private Room dataToObject(String temp) {
-        Room r = null;
-        String[] word = temp.split(";");
-        if (word.length > 0) {
-            try {
-                String ID = word[0];
-                String name = word[1];
-                String type = word[2];
-                int rate = Integer.parseInt(word[3]);
-                int capacity = Integer.parseInt(word[4]);
-                String funiture = word[5];
-                r = new Room(ID, name, type, rate, capacity, funiture);
-            } catch (Exception e) {
-            }
+        Room room = null;
+        Acceptable acpt = new Acceptable();
+        String[] part = temp.split(";");
+        if (part.length != 6) {
+            return null;
         }
-        return r;
+        try {
+            String ID = part[0].trim();
+            String name = part[1].trim();
+            String type = part[2].trim();
+            String rateStr = part[3].trim();
+            String capacityStr = part[4].trim();
+            String funiture = part[5].trim();
+
+            if (!acpt.isRoomIdValid(ID)) {
+                return null;
+            }
+            if (!acpt.isRateValid(rateStr)) {
+                return null;
+            }
+            if (!acpt.isCapacityValid(capacityStr)) {
+                return null;
+            }
+
+            double rate = Double.parseDouble(rateStr);
+            int capacity = Integer.parseInt(capacityStr);
+            room = new Room(ID, name, type, rate, capacity, funiture);
+        } catch (Exception e) {
+        }
+
+        return room;
+    }
+
+    public void func01() {
+        this.readFromFile();
+    }
+
+    public void func02() {
+        this.showAll();
     }
 }
