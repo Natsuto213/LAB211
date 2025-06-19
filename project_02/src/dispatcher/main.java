@@ -1,13 +1,18 @@
 package dispatcher;
 
+import business.Customers;
 import business.Rooms;
 import java.util.Scanner;
+import tools.Inputter;
 
 public class main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Inputter ip = new Inputter();
+
         Rooms rooms = new Rooms("./src/data/Active_Room_List.txt");
+        Customers customers = new Customers();
 
         int testcase;
         do {
@@ -29,7 +34,19 @@ public class main {
                     rooms.func01();
                     break;
                 case 2:
-                    rooms.showAll();
+                    rooms.func02();
+                    break;
+                case 3:
+                    customers.func03(ip,rooms);
+                    break;
+                case 4:
+                    customers.func04(sc, ip, rooms);
+                    break;
+                case 5:
+                    customers.func05(sc, rooms);
+                    break;
+                case 6:
+                    customers.func06(sc, rooms);
                     break;
                 default:
                     System.out.println("Exit... Bye bye");

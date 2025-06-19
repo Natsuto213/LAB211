@@ -1,5 +1,8 @@
 package models;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Customer {
@@ -99,6 +102,12 @@ public class Customer {
 
     public void setCoTenant(String coTenant) {
         this.coTenant = coTenant;
+    }
+
+    public String getCheckOutDate() {
+        LocalDate checkIn = this.startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate checkOut = checkIn.plusDays(rentalDays);
+        return checkOut.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     @Override

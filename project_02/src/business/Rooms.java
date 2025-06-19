@@ -33,7 +33,10 @@ public class Rooms extends TreeMap<String, Room> {
             System.out.println("Room list is currently empty, not loaded yet.");
             System.out.println("--------------------------------------");
         }
+    }
 
+    public Room searchByID(String id) {
+        return this.get(id);
     }
 
     public void readFromFile() {
