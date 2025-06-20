@@ -11,7 +11,7 @@ public class Customer {
     private String name;
     private Date birthdate;
     private String gender;
-    private int phone;
+    private String phone;
     private String roomID;
     private int rentalDays;
     private Date startDate;
@@ -20,7 +20,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String nationalID, String name, Date birthdate, String gender, int phone, String roomID, int rentalDays, Date startDate, String coTenant) {
+    public Customer(String nationalID, String name, Date birthdate, String gender, String phone, String roomID, int rentalDays, Date startDate, String coTenant) {
         this.nationalID = nationalID;
         this.name = name;
         this.birthdate = birthdate;
@@ -64,11 +64,11 @@ public class Customer {
         this.gender = gender;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

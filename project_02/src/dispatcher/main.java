@@ -1,6 +1,7 @@
 package dispatcher;
 
 import business.Customers;
+import business.Reports;
 import business.Rooms;
 import java.util.Scanner;
 import tools.Inputter;
@@ -13,6 +14,7 @@ public class main {
 
         Rooms rooms = new Rooms("./src/data/Active_Room_List.txt");
         Customers customers = new Customers();
+        Reports reports = new Reports();
 
         int testcase;
         do {
@@ -37,7 +39,7 @@ public class main {
                     rooms.func02();
                     break;
                 case 3:
-                    customers.func03(ip,rooms);
+                    customers.func03(ip, rooms);
                     break;
                 case 4:
                     customers.func04(sc, ip, rooms);
@@ -47,6 +49,12 @@ public class main {
                     break;
                 case 6:
                     customers.func06(sc, rooms);
+                    break;
+                case 7:
+                    rooms.func07(customers);
+                    break;
+                case 8:
+                    reports.func08(sc, customers, rooms);
                     break;
                 default:
                     System.out.println("Exit... Bye bye");

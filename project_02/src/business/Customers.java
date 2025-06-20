@@ -1,9 +1,12 @@
 package business;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Customer;
 import models.Room;
 import tools.Inputter;
@@ -14,6 +17,22 @@ public class Customers extends HashSet<Customer> {
     private boolean isSaved;
 
     public Customers() {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+            this.add(new Customer("012345678901", "Alice Tran", sdf.parse("12/03/1990"), "Female", "0901234567", "R101", 3, sdf.parse("25/06/2025"), "Bob Nguyen"));
+            this.add(new Customer("012345678902", "Minh Nguyen", sdf.parse("05/07/1985"), "Male", "0912345678", "R102", 5, sdf.parse("26/06/2025"), ""));
+            this.add(new Customer("012345678903", "Thao Le", sdf.parse("09/11/1992"), "Female", "0923456789", "R103", 2, sdf.parse("22/07/2025"), "Lan Pham"));
+            this.add(new Customer("012345678904", "Khoa Pham", sdf.parse("15/01/1988"), "Male", "0934567890", "R104", 4, sdf.parse("01/07/2025"), ""));
+            this.add(new Customer("012345678905", "Linh Dang", sdf.parse("18/06/1995"), "Female", "0945678901", "R105", 3, sdf.parse("30/06/2025"), "Hung Do"));
+            this.add(new Customer("012345678906", "Huy Tran", sdf.parse("22/02/1990"), "Male", "0956789012", "R106", 6, sdf.parse("05/07/2025"), ""));
+            this.add(new Customer("012345678907", "Trang Vo", sdf.parse("30/09/1989"), "Female", "0967890123", "R107", 1, sdf.parse("24/06/2025"), ""));
+            this.add(new Customer("012345678908", "Son Ho", sdf.parse("01/04/1993"), "Male", "0978901234", "R108", 7, sdf.parse("10/07/2025"), ""));
+            this.add(new Customer("012345678909", "Mai Ly", sdf.parse("11/12/1991"), "Female", "0989012345", "R109", 2, sdf.parse("28/06/2025"), "Tuan Le"));
+            this.add(new Customer("012345678910", "Dat Nguyen", sdf.parse("03/08/1987"), "Male", "0990123456", "R110", 5, sdf.parse("15/07/2025"), ""));
+        } catch (ParseException ex) {
+            Logger.getLogger(Customers.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public boolean isDupplicate(Customer c) {
@@ -46,7 +65,12 @@ public class Customers extends HashSet<Customer> {
     public void display(Customer c, Rooms rooms) {
         Room r = rooms.searchByID(c.getRoomID());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String birthDateFormat = sdf.format(c.getBirthdate());
+        String birthDateFormat;
+        if (c.getBirthdate() != null) {
+            birthDateFormat = sdf.format(c.getBirthdate());
+        } else {
+            birthDateFormat = "";
+        }
         String checkInFormat = sdf.format(c.getStartDate());
         System.out.println("-----------------------------------------------------------------------------");
         System.out.println("Guest information [National ID: " + c.getNationalID() + "]");
@@ -71,7 +95,7 @@ public class Customers extends HashSet<Customer> {
         System.out.println("-----------------------------------------------------------------------------");
     }
 
-    public void func03(Inputter ip,Rooms rooms) {
+    public void func03(Inputter ip, Rooms rooms) {
         Customer c = ip.inputCustomer(false, rooms);
 
         this.addNew(c);
@@ -96,6 +120,17 @@ public class Customers extends HashSet<Customer> {
         } else {
             Customer customer = ip.inputCustomer(true, rooms);
             customer.setNationalID(nationalID);
+            if (customer.getBirthdate() == null) {
+                customer.setBirthdate(c.getBirthdate());
+            }
+            if (customer.getPhone().isEmpty()) {
+                customer.setPhone(c.getPhone());
+            }
+            if (customer.getGender().isEmpty()) {
+                customer.setGender(c.getGender());
+
+            }
+            this.update(customer);
             System.out.println("----------------------------------------------------");
             System.out.println("Guest information updated for ID: " + customer.getNationalID());
             System.out.println("----------------------------------------------------");

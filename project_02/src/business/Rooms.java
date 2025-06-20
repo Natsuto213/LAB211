@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import models.Customer;
 import models.Room;
 import tools.Acceptable;
 
@@ -124,5 +125,28 @@ public class Rooms extends TreeMap<String, Room> {
 
     public void func02() {
         this.showAll();
+    }
+
+    public void func07(Customers customers) {
+        boolean found = false;
+        System.out.format("%-6s | %-16s | %-8s | %-6s | %-8s | %-22s\n",
+                "RoomID", "RoomName", "Type", "Rate", "Capacity", "Furniture");
+        System.out.println("-------+------------------+----------+--------+----------+---------------------------------------");
+        for (Room r : this.values()) {
+            boolean isRented = false;
+            for (Customer c : customers) {
+                if (r.getRoomID().equalsIgnoreCase(c.getRoomID())) {
+                    isRented = true;
+                    break;
+                }
+            }
+            if (!isRented) {
+                System.out.println(r);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("All rooms are currently rented out — no availability at the moment!.");
+        }
     }
 }
