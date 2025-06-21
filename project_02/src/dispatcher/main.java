@@ -13,7 +13,7 @@ public class main {
         Inputter ip = new Inputter();
 
         Rooms rooms = new Rooms("./src/data/Active_Room_List.txt");
-        Customers customers = new Customers();
+        Customers customers = new Customers("./src/data/guestInfo.dat");
         Reports reports = new Reports();
 
         int testcase;
@@ -55,6 +55,12 @@ public class main {
                     break;
                 case 8:
                     reports.func08(sc, customers, rooms);
+                    break;
+                case 9:
+                    reports.func09(sc, customers, rooms);
+                    break;
+                case 10:
+                    customers.func10();
                     break;
                 default:
                     System.out.println("Exit... Bye bye");

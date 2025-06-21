@@ -40,6 +40,10 @@ public class Rooms extends TreeMap<String, Room> {
         return this.get(id);
     }
 
+    public Room searchByRoomType(String roomType) {
+        return this.get(roomType);
+    }
+
     public void readFromFile() {
         int successful = 0, fail = 0;
 

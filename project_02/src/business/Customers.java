@@ -1,5 +1,9 @@
 package business;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,12 +15,17 @@ import models.Customer;
 import models.Room;
 import tools.Inputter;
 
-public class Customers extends HashSet<Customer> {
+public class Customers extends HashSet<Customer> implements Serializable {
 
     private String filePath;
     private boolean isSaved;
 
     public Customers() {
+    }
+
+    public Customers(String filePath) {
+        this.filePath = filePath;
+        this.isSaved = false;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -45,6 +54,7 @@ public class Customers extends HashSet<Customer> {
         } else {
             System.out.println("This customer has already exist!");
         }
+        this.isSaved = false;
     }
 
     public void update(Customer c) {
@@ -93,6 +103,33 @@ public class Customers extends HashSet<Customer> {
         System.out.format("+ %-10s: %d\n", "Capacity", r.getCapacity());
         System.out.format("+ %-10s: %s\n", "Funiture", r.getFurniture());
         System.out.println("-----------------------------------------------------------------------------");
+    }
+
+    public void saveToFile() {
+        if (isSaved) {
+            return;
+
+        }
+        FileOutputStream fos = null;
+        try {
+            File f = new File(filePath);
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+
+            fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            for (Customer c : this) {
+                oos.writeObject(c);
+            }
+            oos.close();
+        } catch (Exception ex) {
+        } finally {
+            try {
+                fos.close();
+            } catch (Exception ex) {
+            }
+        }
     }
 
     public void func03(Inputter ip, Rooms rooms) {
@@ -174,5 +211,11 @@ public class Customers extends HashSet<Customer> {
                 System.out.println("The room booking for this guest cannot be cancelled!");
             }
         }
+    }
+
+    public void func10() {
+        this.saveToFile();
+        System.out.println("----------------------");
+        System.out.println("Update succesfull!");
     }
 }
