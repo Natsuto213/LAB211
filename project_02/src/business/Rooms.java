@@ -93,7 +93,7 @@ public class Rooms extends TreeMap<String, Room> {
         Room room = null;
         Acceptable acpt = new Acceptable();
         String[] part = temp.split(";");
-        if (part.length != 6) {
+        if (part.length != 6) { // If don't have enough feilds
             return null;
         }
         try {
@@ -116,6 +116,7 @@ public class Rooms extends TreeMap<String, Room> {
 
             double rate = Double.parseDouble(rateStr);
             int capacity = Integer.parseInt(capacityStr);
+
             room = new Room(ID, name, type, rate, capacity, funiture);
         } catch (Exception e) {
         }

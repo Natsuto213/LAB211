@@ -16,7 +16,6 @@ public class Acceptable {
     public boolean isRoomIdValid(String roomID) {
         try {
             return roomID.matches("^R\\d{3}");
-
         } catch (Exception e) {
             return false;
         }
