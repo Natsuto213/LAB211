@@ -1,6 +1,6 @@
 package models;
 
-public class Room {
+public class Room implements Comparable<Room> {
 
     private String roomID;
     private String name;
@@ -73,6 +73,11 @@ public class Room {
     public String toString() {
         return String.format("%-6s | %-16s | %-8s | %6.2f | %8d | %-22s",
                 roomID, name, type, dailyRate, capacity, furniture);
+    }
+
+    @Override
+    public int compareTo(Room that) {
+        return Double.compare(this.getDailyRate(), that.getDailyRate());
     }
 
 }

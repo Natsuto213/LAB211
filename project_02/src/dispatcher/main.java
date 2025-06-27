@@ -28,6 +28,7 @@ public class main {
                     + "8. Monthly Revenue Report\n"
                     + "9. Revenue Report by Room Type\n"
                     + "10. Save Guest Information\n"
+                    + "11. Print room by room type and suitable for min price and max price\n"
                     + "Others - Quit");
             System.out.print("Enter your option: ");
             testcase = Integer.parseInt(sc.nextLine());
@@ -62,12 +63,14 @@ public class main {
                 case 10:
                     customers.func10();
                     break;
+                case 11:
+                    rooms.func11(sc);
+                    break;
                 default:
                     System.out.println("Exit... Bye bye");
                     break;
-
             }
-        } while (testcase > 0 && testcase < 11);
+        } while (testcase > 0 && testcase < 12);
     }
 
 }

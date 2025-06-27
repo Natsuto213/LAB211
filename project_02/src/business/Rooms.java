@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -153,5 +156,38 @@ public class Rooms extends TreeMap<String, Room> {
         if (!found) {
             System.out.println("All rooms are currently rented out — no availability at the moment!.");
         }
+    }
+
+    //In ra loai phong mong doi theo khoang gia (Sap xep theo tang dan theo gia).
+    public void func11(Scanner sc) {
+        System.out.print("Enter room type: ");
+        String roomType = sc.nextLine();
+        System.out.print("Min price: ");
+        double minPrice = Integer.parseInt(sc.nextLine());
+        System.out.print("Max price: ");
+        double maxPrice = Integer.parseInt(sc.nextLine());
+
+        ArrayList<Room> result = new ArrayList<>();
+        for (Room room : this.values()) {
+            if (room.getType().equalsIgnoreCase(roomType)) {
+                if (room.getDailyRate() >= minPrice && room.getDailyRate() <= maxPrice) {
+                    result.add(room);
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            System.out.println("Can't find room suitable with price!");
+        } else {
+            System.out.println("-------------------------------------------------------------------------------------------------");
+            System.out.format("%-6s | %-16s | %-8s | %-6s | %-8s | %-22s\n",
+                    "RoomID", "RoomName", "Type", "Rate", "Capacity", "Furniture");
+            System.out.println("-------+------------------+----------+--------+----------+---------------------------------------");
+
+            Collections.sort(result);
+            for (Room room : result) {
+                System.out.println(room);
+            }
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------");
     }
 }

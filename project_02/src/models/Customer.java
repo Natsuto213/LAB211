@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -112,6 +113,8 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" + "nationalID=" + nationalID + ", name=" + name + ", birthdate=" + birthdate + ", gender=" + gender + ", phone=" + phone + ", roomID=" + roomID + ", rentalDays=" + rentalDays + ", startDate=" + startDate + ", coTenant=" + coTenant + '}';
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return String.format("%-12s | %-12s | %-8s | %-6s | %-10s | %-6s | %10d | %-9s | %-8s",
+                nationalID, name, sdf.format(birthdate), gender, phone, roomID, rentalDays, sdf.format(startDate), coTenant);
     }
 }
